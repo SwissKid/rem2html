@@ -84,7 +84,7 @@ if ($Options{'help'}) {
 # get the data from remind here.
     $Options{'x'} && open STDIN, "$Options{'x'}  |" || die "<b>Unable to open todo file</b><br>";
     if (-t STDIN) {
-	print  "(Rem2HTML: Input should not come from a terminal.)\n";
+	print STDERR "(Rem2HTML: Input should not come from a terminal.)\n";
 	&show_usage();
     } else {
 	while(1) {  
@@ -94,7 +94,7 @@ if ($Options{'help'}) {
 	    &output_data();
 	    &output_footer();
 	}
-	print  "Rem2HTML: Couldn't find any calendar data.\n" if (!$successes);
+	print STDERR "Rem2HTML: Couldn't find any calendar data.\n" if (!$successes);
 	unless ($Options{'tableonly'}) {
 print  <<EndOfHTML;
 	    </body>
