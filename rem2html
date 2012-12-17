@@ -67,7 +67,7 @@ $rem2html_version = "1.2-beta";
 # do not correctly handle transparency in PNG images, so I had to make the
 # moon image background white.
 $Options{'bgcolor'} ||= "bgcolor=\"#FFFFFF\"";
-$Options{'daycolor'} ||= "bgcolor=\"#FFFFFF\"";
+$Options{'calcolor'} ||= "$bgcolor";
 
 # if (-t STDIN) {
 #     print  "(Rem2HTML: Input should not come from a terminal.)\n";
@@ -167,13 +167,13 @@ EndOfUsage
 		"x:s",
 		"fs=s", "fh=s", "ft=s", "fe=s", "fd=s",
 		"sh=i", "st=i", "se=i", "sd=i",
-		"daycolor|c=s",
+		"calcolor|c=s",
 		);
 
 	$Options{'border'} = "border=" . ($Options{'border'} || 1);
 	$Options{'cellspace'} &&= "cellspacing=$Options{'cellspace'}";
 	$Options{'bgcolor'} &&= "bgcolor=$Options{'bgcolor'}";
-	$Options{'daycolor'} &&= "bgcolor=$Options{'daycolor'}";
+	$Options{'calcolor'} &&= "bgcolor=$Options{'calcolor'}";
 	$Options{'title'} = ($Options{'title'}) ? $Options{'title'} : "Calendar";
     }
 
@@ -212,11 +212,11 @@ EndOfUsage
 		$day = $3;
 
 		if ($tag eq "Busy") {
-		    $tagcolor = "background-color:red;";
+		    $tagcolor = "background-color:#FFC0C0;";
 		} elsif ($tag eq "Free") {
-		    $tagcolor = "background-color:green;";
+		    $tagcolor = "background-color:#C0FFC0;";
 		} elsif ($tag eq "Unk") {
-		    $tagcolor = "background-color:yellow;" ;
+		    $tagcolor = "background-color:#FFFFC0;" ;
 		} else {
 		    $tagcolor = "";
 		}
@@ -349,7 +349,7 @@ EndOfHTML
 
 print  <<EndOfHTML;
 	<div class="calendar" id="$month$year">
-	    <table class="caltable" $Options{'border'} $Options{'cellspace'} $Options{'daycolor'} width=100%>
+	    <table class="caltable" $Options{'border'} $Options{'cellspace'} $Options{'calcolor'} width=100%>
 	    <caption><strong>$caption</strong></caption>
 	    <tr>
 EndOfHTML
