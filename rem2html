@@ -47,6 +47,24 @@
 #
 #
 ########################################################################
+# This was heavily modified by swiss <swiss@veryoblivio.us>
+# I did many things, including adding:
+#  - Calendar Color (as opposed to the entire background color
+#  - Busy/Free/Unk coloring for lines and cells based on the TAG element
+#  - Hilighting of Today 
+#  - Processing of "COLOR" special element to allow color setting before the message
+#
+#########################################################################
+
+
+
+
+
+
+
+
+
+
 
 use Getopt::Long;
 
@@ -212,6 +230,8 @@ EndOfUsage
 		$day = $3;
 
 		if ($tag eq "Busy") {
+		    $tagcolor = "background-color:#FF4747;";
+		} elsif ($tag eq "Sched") {
 		    $tagcolor = "background-color:#FFC0C0;";
 		} elsif ($tag eq "Free") {
 		    $tagcolor = "background-color:#C0FFC0;";
@@ -263,26 +283,26 @@ EndOfUsage
 			next;
 		    }
 		    next if ($red > 255 || $green > 255 || $blue > 255);
-# shading done here
+		    # shading done here
 		    $shades[$day] = sprintf(" class=\"shaded\" bgcolor=\"#%02X%02X%02X\"",
 			    $red, $green, $blue);
 		} elsif ($type eq "COLOR") {
 		    my($red, $green, $blue);
 		    if ($msg =~ /^\s*(\d+)\s+(\d+)\s+(\d+)\s*MSG\s+.*$/) {
-			$cellred = $1;
-			$cellgreen = $2;
-			$cellblue = $3;
+			$red = $1;
+			$green = $2;
+			$blue = $3;
 		    } elsif ($msg =~ /^\s*(\d+)\s*$/) {
-			$cellred = $1;
-			$cellgreen = $1;
-			$cellblue = $1;
+			$red = $1;
+			$green = $1;
+			$blue = $1;
 		    } else {
 			next;
 		    }
 		    next if ($red > 255 || $green > 255 || $blue > 255);
-# shading done here
+		    # shading done here
 		    $shades[$day] = sprintf(" class=\"shaded\" bgcolor=\"#%02X%02X%02X\"",
-			    $cellred, $cellgreen, $cellblue);
+			    $red, $green, $blue);
 		    $msg =~ s/.*MSG\s+//;
 		    $title = $msg if ( $msg =~ /DETAIL:/ );
 		    $title =~ s/.*DETAIL: //;
@@ -291,18 +311,16 @@ EndOfUsage
 		    $msg = &escape_html($msg);
 		    $days[$day] .= "<span style=\"$tagcolor;\" class=\"msg\" $title>$msg</span><br/>";
 		} elsif ($type eq "*") {
-# this is the MSG from remind
+		    # this is the MSG from remind
 		    $title = $msg if ( $msg =~ /DETAIL:/ );
 		    $title =~ s/.*DETAIL: //;
 		    $msg =~ s/DETAIL: .*//;
 		    $title = "\"$title\"" if (length($title) > 0);
 		    $msg = &escape_html($msg);
-#	  $days[$day] .= "<p class=\"msg\"><a href='#' $title>$msg</a></p>";
-#	  $days[$day] .= "<p class=\"msg\"><span $title>$msg</span></p>";
 		    if ( $msg =~ m/^\D.*$/ ) {
 			$shades[$day] = " style=\"$tagcolor\"";
 		    }
-		    $days[$day] .= "<span style=\"$tagcolor;\" class=\"msg\" $title>$msg</span><br/>";
+		    $days[$day] .= "<span style=\"$tagcolor\" class=\"$tag\" $title>$msg</span><br/>";
 		}
 	    }
 	    $where++;
