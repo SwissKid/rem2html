@@ -329,12 +329,26 @@ print  <<EndOfHTML;
 		    <head><title>$Options{'title'}</title>
 		    <meta http-equiv="refresh" content="1200">
 		    <link rel="stylesheet" id="mainStyle" href="remind.css" type="text/css" />
+		    <style>
+		    #today
+		    {
+			border-color:green;
+			border-width:3px;
+		    }
+		    </style>
 		    <script language="javascript">
 		    <!-- 
 		    function hotbox_on(name) {
 			if (name == "nada") { 
 			    return false;
 			}
+			if (name == "today") {
+			    oldcolor=document.getElementById(name).style.borderColor;
+			    document.getElementById(name).style.borderColor="red" ;
+			    document.getElementById(name).style.borderWidth="8px" ;
+			    return true;
+			    }
+			    
 			oldcolor=document.getElementById(name).style.borderColor;
 			document.getElementById(name).style.borderColor="pink" ;
 			document.getElementById(name).style.borderWidth="3px" ;
@@ -344,6 +358,12 @@ print  <<EndOfHTML;
 		    if (name == "nada") { 
 			return false;
 		    }
+		    if (name == "today") {
+			oldcolor=document.getElementById(name).style.borderColor;
+			document.getElementById(name).style.borderColor="green" ;
+			document.getElementById(name).style.borderWidth="3px" ;
+			return true;
+			}
 		    oldcolor="black";
 		    document.getElementById(name).style.borderWidth="1px" ;
 		    document.getElementById(name).style.borderColor=oldcolor ;
