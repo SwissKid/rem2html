@@ -201,7 +201,7 @@ EndOfUsage
 	local $type;
 	local $day;
 	my $title;
-	my $tagcolor;
+	my $tagstyle;
 	@days = ();
 	@shades = ();
 	@moons = ();
@@ -229,16 +229,10 @@ EndOfUsage
 		$msg = $8;
 		$day = $3;
 
-		if ($tag eq "Busy") {
-		    $tagcolor = "background-color:#FF4747;";
-		} elsif ($tag eq "Sched") {
-		    $tagcolor = "background-color:#FFC0C0;";
-		} elsif ($tag eq "Free") {
-		    $tagcolor = "background-color:#C0FFC0;";
-		} elsif ($tag eq "Unk") {
-		    $tagcolor = "background-color:#FFFFC0;" ;
+		if ($tag ne "*") {
+		    $tagstyle = lc($tag);
 		} else {
-		    $tagcolor = "";
+		    $tagstyle = "msg";
 		}
 
 		if ($type eq "HTML") {
@@ -309,7 +303,7 @@ EndOfUsage
 		    $msg =~ s/DETAIL: .*//;
 		    $title = "\"$title\"" if (length($title) > 0);
 		    $msg = &escape_html($msg);
-		    $days[$day] .= "<span style=\"$tagcolor;\" class=\"msg\" $title>$msg</span><br/>";
+		    $days[$day] .= "<span style=\"$tagstyle;\" class=\"msg\" $title>$msg</span><br/>";
 		} elsif ($type eq "*") {
 		    # this is the MSG from remind
 		    $title = $msg if ( $msg =~ /DETAIL:/ );
@@ -318,9 +312,9 @@ EndOfUsage
 		    $title = "\"$title\"" if (length($title) > 0);
 		    $msg = &escape_html($msg);
 		    if ( $msg =~ m/^\D.*$/ ) {
-			$shades[$day] = " style=\"$tagcolor\"";
+			$shades[$day] = "class=\"$tagstyle\"";
 		    }
-		    $days[$day] .= "<span style=\"$tagcolor\" class=\"$tag\" $title>$msg</span><br/>";
+		    $days[$day] .= "<span class=\"$tagstyle\" $title>$msg</span><br/>";
 		}
 	    }
 	    $where++;
@@ -466,7 +460,7 @@ sub output_data {
 	for $weekday ( 0..6 ) {
 	    $element = ($week * 7) + ($weekday * 1);
 	    $day = $element - $firstday + 1;
-	    $cell = ($Options{'print'}) ? "print" :"cell";
+	    $cell = ($Options{'print'}) ? "class=\"print\"" :$shades[$day];
 	    $msg = $days[$day];
 	    $id = $Options{'print'} ? "nada" : &fdate($day,$month,$year) ;
 	    $id = "today" if ("$today" eq "$id");
@@ -477,7 +471,7 @@ sub output_data {
 	    if ($day > 0 && $day <= $month_length) {
 # day numeral is here.
 print  <<EndOfHTML;
-		<td class="$cell" id="$id" onmousedown='hotbox_on("$id");' onmouseup='hotbox_off("$id");' height="120"  valign=top width=$def_width $shades[$day]>
+		<td $cell id="$id" onmousedown='hotbox_on("$id");' onmouseup='hotbox_off("$id");' height="120"  valign=top width=$def_width >
 		    <div class="innercell">
 		    <div class="numeral">$moons[$day]$fday</div>
 		    </div><p></p>
