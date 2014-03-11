@@ -340,6 +340,7 @@ print  <<EndOfHTML;
 		<html>
 		    <head><title>$Options{'title'}</title>
 		    <meta http-equiv="refresh" content="1200">
+		    <meta charset="utf-8" />
 		    <link rel="stylesheet" id="mainStyle" href="remind.css" type="text/css" />
 		    <style>
 		    #today
